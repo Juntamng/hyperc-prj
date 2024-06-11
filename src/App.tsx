@@ -11,8 +11,9 @@ import {
 } from "@mui/material";
 
 import React, { useEffect, useState } from "react";
+import Detail from "./Detail";
 
-type User = {
+export type User = {
   id: string;
   username: string;
   firstname: string;
@@ -26,6 +27,7 @@ type User = {
 
 function App() {
   const [data, setData] = useState<User[] | undefined>(undefined);
+  const [selUser, setSelUser] = useState<User>();
 
   const fetchData = async () => {
     const response = await fetch(
@@ -36,7 +38,7 @@ function App() {
     );
 
     const rs = await response.json();
-    setData([...rs.data.users]);
+    setData([...rs.data.users.slice(0, 9)]);
   };
 
   useEffect(() => {
@@ -44,41 +46,58 @@ function App() {
     return () => {};
   }, []);
 
-  const Item = ({ data }: { data: User }) => {
+  const handleSelUser = (user: User) => {
+    setSelUser(user);
+  };
+
+  const Item = ({
+    data,
+    onSelect,
+  }: {
+    data: User;
+    onSelect: (user: User) => void;
+  }) => {
     return (
       <Box sx={{ border: "1px red solid", flexBasis: "33%" }}>
         <Card sx={{ border: "1px green solid", m: 1 }}>
           <CardMedia
             sx={{ height: 140 }}
             image={data.avatar}
-            title="green iguana"
+            title={data.username}
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {data.username}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              align="center"
+            >
+              {data.firstname + " " + data.lastname}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
+          <CardActions sx={{ display: "flex", justifyContent: "center" }}>
+            <Button
+              size="small"
+              onClick={() => {
+                onSelect(data);
+              }}
+            >
+              View More
+            </Button>
           </CardActions>
         </Card>
       </Box>
     );
   };
 
-  const ItemList = () => {
+  const ItemList = ({ onSelUser }: { onSelUser: (user: User) => void }) => {
     if (data === undefined) {
       return <Typography align="center">Loading...</Typography>;
     } else if (data.length) {
       return (
         <Stack direction="row" flexWrap="wrap" spacing={0}>
           {data.map((item) => (
-            <Item data={item} />
+            <Item key={item.id} data={item} onSelect={onSelUser} />
           ))}
         </Stack>
       );
@@ -87,7 +106,14 @@ function App() {
 
   return (
     <Container maxWidth="md" sx={{ my: 2 }}>
-      <ItemList />
+      <ItemList onSelUser={handleSelUser} />
+      {selUser && (
+        <Detail
+          key={selUser.id}
+          user={selUser}
+          onClose={() => setSelUser(undefined)}
+        />
+      )}
     </Container>
   );
 }
