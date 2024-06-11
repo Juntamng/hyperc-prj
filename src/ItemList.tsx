@@ -77,7 +77,7 @@ const ItemList = ({
           alignItems: "center",
           justifyContent: "center",
         }}
-        totalCount={1000}
+        totalCount={users.length}
         components={gridComponents}
         itemContent={(index) => {
           const item = users[index];

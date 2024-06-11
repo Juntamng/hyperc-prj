@@ -4,7 +4,6 @@ import {
   Card,
   CardActions,
   CardContent,
-  // CardMedia,
   Typography,
   Avatar,
 } from "@mui/material";
@@ -20,11 +19,6 @@ const ItemCard = ({
   return (
     <Box sx={{ width: "100%" }}>
       <Card sx={{ border: "2px #e7e7e7 solid", m: 1 }}>
-        {/* <CardMedia
-          sx={{ height: 140 }}
-          image={data.avatar}
-          title={data.username}
-        /> */}
         <CardContent>
           <Avatar
             alt={data.username}

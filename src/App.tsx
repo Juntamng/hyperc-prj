@@ -27,7 +27,7 @@ function App() {
     );
 
     const rs = await response.json();
-    setData([...rs.data.users.slice(0, 1000)]);
+    setData([...rs.data.users]);
   };
 
   useEffect(() => {
