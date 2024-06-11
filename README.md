@@ -2,5 +2,6 @@
 
 ## Areas to improve
 
-use state manage like redux to mange ajax calls
-make it responsive
+### use state manage like redux to mange ajax calls
+
+### make it responsive
